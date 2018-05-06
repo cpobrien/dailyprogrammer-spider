@@ -3,8 +3,10 @@ package org.connor.dpcrawler.dynamo;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.document.BatchGetItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.TableKeysAndAttributes;
@@ -29,27 +31,27 @@ public class Serializer {
     }
 
     public boolean seenAny(List<Post> posts) {
-        var request = buildBatchPostRequest(posts);
+        TableKeysAndAttributes request = buildBatchPostRequest(posts);
         List<Item> postResults = queryBatchItemResults(request);
         return postResults.size() > 0;
     }
 
     private List<Item> queryBatchItemResults(TableKeysAndAttributes forumTableKeysAndAttributes) {
-        var outcome = dynamoDB.batchGetItem(forumTableKeysAndAttributes);
+        BatchGetItemOutcome outcome = dynamoDB.batchGetItem(forumTableKeysAndAttributes);
         return outcome.getTableItems().get(TABLE_NAME);
     }
 
     @NotNull
     private TableKeysAndAttributes buildBatchPostRequest(List<Post> posts) {
-        var batchPostRequest = new TableKeysAndAttributes(TABLE_NAME);
+        TableKeysAndAttributes batchPostRequest = new TableKeysAndAttributes(TABLE_NAME);
         batchPostRequest.addHashOnlyPrimaryKeys("Id", posts.stream().map(Post::getId).toArray());
         return batchPostRequest;
     }
 
     public static Serializer makeSerializer(Config config) {
-        var credentials = new BasicAWSCredentials(config.awsAccessKey, config.awsSecretKey);
-        var credentialsProvider = new AWSStaticCredentialsProvider(credentials);
-        var client = AmazonDynamoDBClientBuilder.standard()
+        BasicAWSCredentials credentials = new BasicAWSCredentials(config.awsAccessKey, config.awsSecretKey);
+        AWSStaticCredentialsProvider credentialsProvider = new AWSStaticCredentialsProvider(credentials);
+        AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
                 .withRegion(Regions.US_EAST_1)
                 .withCredentials(credentialsProvider)
                 .build();

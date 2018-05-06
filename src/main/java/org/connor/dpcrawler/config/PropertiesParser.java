@@ -14,7 +14,7 @@ public class PropertiesParser {
     }
 
     public static Config retrieveConfigFromProperties() throws FileNotFoundException, IllegalArgumentException {
-        var properties = new Properties();
+        Properties properties = new Properties();
         try {
             properties.load(new FileInputStream(PROPERTIES_PATH));
         } catch (IOException e) {
@@ -24,12 +24,12 @@ public class PropertiesParser {
     }
 
     private Config propertyToConfig() throws IllegalArgumentException {
-        var awsPrivateKey = getProperty("aws.accessKey");
-        var awsSecretKey = getProperty("aws.secretKey");
-        var redditUsername = getProperty("reddit.username");
-        var redditPassword = getProperty("reddit.password");
-        var redditClientId = getProperty("reddit.clientId");
-        var redditClientSecret= getProperty("reddit.clientSecret");
+        String awsPrivateKey = getProperty("aws.accessKey");
+        String awsSecretKey = getProperty("aws.secretKey");
+        String redditUsername = getProperty("reddit.username");
+        String redditPassword = getProperty("reddit.password");
+        String redditClientId = getProperty("reddit.clientId");
+        String redditClientSecret= getProperty("reddit.clientSecret");
         return new Config(awsPrivateKey,
                 awsSecretKey,
                 redditUsername,
@@ -39,7 +39,7 @@ public class PropertiesParser {
     }
 
     public String getProperty(String key) throws IllegalArgumentException {
-        var value = properties.getProperty(key);
+        String value = properties.getProperty(key);
         if (value == null) {
             throw new IllegalArgumentException(String.format("Missing key %s!", key));
         }
