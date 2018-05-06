@@ -17,7 +17,9 @@ public class Crawler {
     private final ExistenceValidator existenceValidator;
 
     public Crawler(Config config) {
-        this(Reddit.buildRedditClient(config), new Serializer(config), new DefaultExistenceValidator(config));
+        this(new Reddit(config),
+                new Serializer(config),
+                new DefaultExistenceValidator(config));
     }
 
     public Crawler(Reddit client, Serializer serializer, ExistenceValidator existenceValidator) {

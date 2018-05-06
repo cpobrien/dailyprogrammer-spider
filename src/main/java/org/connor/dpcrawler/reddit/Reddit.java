@@ -26,19 +26,19 @@ public class Reddit {
         this.client = redditClient;
     }
 
-    public static Reddit buildRedditClient(Config config) {
-        UserAgent userAgent = new UserAgent("bot",
-                "org.connor.dailyprog",
-                "v0.1",
-                config.redditUsername);
-        NetworkAdapter adapter = new OkHttpNetworkAdapter(userAgent);
-        Credentials credentials = Credentials.script(
-                config.redditUsername,
-                config.redditPassword,
-                config.redditClientId,
-                config.redditClientSecret
-        );
-        return new Reddit(OAuthHelper.automatic(adapter, credentials));
+    public Reddit(Config config) {
+        this(OAuthHelper.automatic(
+                new OkHttpNetworkAdapter(
+                        new UserAgent("bot",
+                                "org.connor.dailyprog",
+                                "v0.1",
+                                config.redditUsername)),
+                Credentials.script(
+                        config.redditUsername,
+                        config.redditPassword,
+                        config.redditClientId,
+                        config.redditClientSecret
+                )));
     }
 
     @NotNull
