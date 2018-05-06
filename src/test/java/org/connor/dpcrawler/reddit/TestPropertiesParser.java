@@ -1,6 +1,6 @@
-package reddit;
+package org.connor.dpcrawler.reddit;
 
-import config.PropertiesParser;
+import org.connor.dpcrawler.config.PropertiesParser;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

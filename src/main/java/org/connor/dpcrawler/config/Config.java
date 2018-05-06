@@ -1,4 +1,4 @@
-package config;
+package org.connor.dpcrawler.config;
 
 public class Config {
     public final String awsAccessKey;

@@ -1,4 +1,4 @@
-package config;
+package org.connor.dpcrawler.config;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

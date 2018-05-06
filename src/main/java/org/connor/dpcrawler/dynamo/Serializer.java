@@ -1,16 +1,15 @@
-package dynamo;
+package org.connor.dpcrawler.dynamo;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.TableKeysAndAttributes;
-import config.Config;
-import model.Post;
+import org.connor.dpcrawler.model.Post;
+import org.connor.dpcrawler.config.Config;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
