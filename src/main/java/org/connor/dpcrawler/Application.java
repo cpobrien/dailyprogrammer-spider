@@ -2,18 +2,13 @@ package org.connor.dpcrawler;
 
 import org.connor.dpcrawler.config.Config;
 import org.connor.dpcrawler.config.PropertiesParser;
-import org.connor.dpcrawler.crawler.DefaultCrawler;
-import org.connor.dpcrawler.dynamo.Serializer;
-import org.connor.dpcrawler.reddit.Reddit;
-
+import org.connor.dpcrawler.crawler.Crawler;
 import java.io.FileNotFoundException;
 
 public class Application {
     public void run() {
         Config config = getConfig();
-        Reddit reddit = Reddit.buildRedditClient(config);
-        Serializer dynamoDBSerializer = Serializer.makeSerializer(config);
-        new DefaultCrawler(reddit, dynamoDBSerializer).crawlPosts();
+        new Crawler(config).crawlPosts();
     }
 
     private Config getConfig() {

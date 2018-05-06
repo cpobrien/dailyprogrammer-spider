@@ -4,6 +4,7 @@ import net.dean.jraw.RedditClient;
 import net.dean.jraw.http.NetworkAdapter;
 import net.dean.jraw.http.OkHttpNetworkAdapter;
 import net.dean.jraw.http.UserAgent;
+import net.dean.jraw.models.Listing;
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.models.SubredditSort;
 import net.dean.jraw.oauth.Credentials;
@@ -15,6 +16,8 @@ import org.connor.dpcrawler.model.Post;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Reddit {
     private final RedditClient client;
@@ -53,5 +56,12 @@ public class Reddit {
         String url = submission.getUrl();
         Date created = submission.getCreated();
         return new Post(id, title, url, created);
+    }
+
+    public List<Post> getCollect(Listing<Submission> nextPage) {
+        return nextPage.getChildren()
+                .stream()
+                .map(this::submissionToPost)
+                .collect(Collectors.toList());
     }
 }
