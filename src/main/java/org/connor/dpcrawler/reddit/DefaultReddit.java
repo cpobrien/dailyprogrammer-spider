@@ -1,21 +1,28 @@
 package org.connor.dpcrawler.reddit;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Queues;
+import kotlin.sequences.Sequence;
 import net.dean.jraw.RedditClient;
 import net.dean.jraw.http.OkHttpNetworkAdapter;
 import net.dean.jraw.http.UserAgent;
 import net.dean.jraw.models.Listing;
+import net.dean.jraw.models.PublicContribution;
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.models.SubredditSort;
 import net.dean.jraw.oauth.Credentials;
 import net.dean.jraw.oauth.OAuthHelper;
 import net.dean.jraw.references.SubredditReference;
+import net.dean.jraw.tree.CommentNode;
+import net.dean.jraw.tree.RootCommentNode;
 import org.connor.dpcrawler.config.Config;
+import org.connor.dpcrawler.config.PropertiesParser;
 import org.connor.dpcrawler.model.Post;
+import org.connor.dpcrawler.model.User;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.io.FileNotFoundException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DefaultReddit implements Reddit {
@@ -51,6 +58,21 @@ public class DefaultReddit implements Reddit {
                 .iterator();
     }
 
+    public Set<String> blah() {
+        Set<String> authors = new HashSet<>();
+        CommentNode commentNodeSequence = client.submission("589txl").comments();
+        Deque<CommentNode> deque = new ArrayDeque<>();
+        deque.add(commentNodeSequence);
+        while (!deque.isEmpty()) {
+            CommentNode node = deque.pop();
+            PublicContribution subject = node.getSubject();
+            String author = subject.getAuthor();
+            authors.add(author);
+            deque.addAll(node.getReplies());
+        }
+        return authors;
+    }
+
     @Override
     public Post submissionToPost(Submission submission) {
         String id = submission.getId();
@@ -61,10 +83,15 @@ public class DefaultReddit implements Reddit {
     }
 
     @Override
-    public List<Post> getCollect(Listing<Submission> nextPage) {
+    public List<Post> getSubmissionPostList(Listing<Submission> nextPage) {
         return nextPage.getChildren()
                 .stream()
                 .map(this::submissionToPost)
                 .collect(Collectors.toList());
+    }
+
+    public static void main(String[] args) throws FileNotFoundException {
+        DefaultReddit reddit = new DefaultReddit(PropertiesParser.retrieveConfigFromProperties());
+        System.out.println(reddit.blah());
     }
 }

@@ -14,5 +14,5 @@ public interface Reddit {
 
     Post submissionToPost(Submission submission);
 
-    List<Post> getCollect(Listing<Submission> nextPage);
+    List<Post> getSubmissionPostList(Listing<Submission> nextPage);
 }

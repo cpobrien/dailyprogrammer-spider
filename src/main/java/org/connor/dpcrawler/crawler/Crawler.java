@@ -34,7 +34,7 @@ public class Crawler {
     public void crawlPosts() {
         for (Iterator<Listing<Submission>> it = reddit.getSubmissions(); it.hasNext();) {
             Listing<Submission> nextPage = it.next();
-            List<Post> posts = reddit.getCollect(nextPage);
+            List<Post> posts = reddit.getSubmissionPostList(nextPage);
             boolean readAnything = existenceValidator.seenPosts(posts);
             serializer.serialize(posts);
             if (readAnything) {

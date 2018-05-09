@@ -31,7 +31,7 @@ public class MockReddit implements Reddit {
     }
 
     @Override
-    public List<Post> getCollect(Listing<Submission> nextPage) {
+    public List<Post> getSubmissionPostList(Listing<Submission> nextPage) {
         getCollectAccessCount++;
         return ImmutableList.of();
     }
